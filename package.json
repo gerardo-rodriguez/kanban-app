@@ -4,16 +4,26 @@
   "description": "Learning Webpack",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "lint": "eslint . --ext .js --ext .jsx"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babel-eslint": "^4.1.5",
     "css-loader": "^0.22.0",
     "es6-promise": "^3.0.2",
+    "eslint": "^1.9.0",
+    "eslint-loader": "^1.1.1",
+    "eslint-plugin-react": "^3.8.0",
     "html-webpack-plugin": "^1.6.2",
+    "jscs": "^2.5.1",
+    "jscs-loader": "^0.2.0",
+    "postcss-loader": "^0.7.0",
     "style-loader": "^0.13.0",
+    "stylelint": "^2.3.0",
     "webpack": "^1.12.3",
-    "webpack-dev-server": "^1.12.1"
+    "webpack-dev-server": "^1.12.1",
+    "webpack-merge": "^0.2.0"
   }
 }

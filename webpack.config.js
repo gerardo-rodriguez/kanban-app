@@ -3,18 +3,29 @@ require('es6-promise').polyfill();
 var path = require('path');
 var HtmlwebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
+var merge = require('webpack-merge');
+var stylelint = require('stylelint');
 
+var TARGET = process.env['npm_lifecycle_event'];
 var ROOT_PATH = path.resolve(__dirname);
 var APP_PATH = path.resolve(ROOT_PATH, 'app');
-var BUILD_PATH = path.resolve(ROOT_PATH, 'build');
+// var BUILD_PATH = path.resolve(ROOT_PATH, 'build');
 
-module.exports = {
+var common = {
   entry: APP_PATH,
-  output: {
-    path: BUILD_PATH,
-    filename: 'bundle.js'
-  },
   module: {
+    preloaders: [
+      {
+        test: /\.jsx?$/,
+        loaders: ['eslint', 'jscs'],
+        include: APP_PATH
+      },
+      {
+        test: /\.css$/,
+        loaders: ['postcss'],
+        include: APP_PATH
+      }
+    ],
     loaders: [
       {
         test: /\.css$/,
@@ -23,20 +34,33 @@ module.exports = {
       }
     ]
   },
-  devServer: {
-    historyApiFallback: true,
-    hot: true,
-    inline: true,
-    progress: true,
-    // parse host and port from env so this is easy
-    // to customize
-    host: process.env.HOST,
-    port: process.env.PORT
+  postcss: function() {
+    return [stylelint({
+      rules: {
+        'color-hex-case': 2
+      }
+    })];
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
+    // Important! move HotModuleReplacementPlugin below
+    // new webpack.HotModuleReplacementPlugin(),
     new HtmlwebpackPlugin({
       title: 'Kanban App Fun'
     })
   ]
 };
+
+if (TARGET === 'start' || !TARGET) {
+  module.exports = merge(common, {
+    devtool: 'eval-source-map',
+    devServer: {
+      historyApiFallback: true,
+      hot: true,
+      inline: true,
+      progress: true
+    },
+    plugins: [
+      new webpack.HotModuleReplacementPlugin()
+    ]
+  });
+}
