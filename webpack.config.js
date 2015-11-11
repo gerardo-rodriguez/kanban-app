@@ -4,25 +4,25 @@ var path = require('path');
 var HtmlwebpackPlugin = require('html-webpack-plugin');
 var webpack = require('webpack');
 var merge = require('webpack-merge');
-var stylelint = require('stylelint');
 
-var TARGET = process.env['npm_lifecycle_event'];
+var TARGET = process.env.npm_lifecycle_event;
 var ROOT_PATH = path.resolve(__dirname);
 var APP_PATH = path.resolve(ROOT_PATH, 'app');
-// var BUILD_PATH = path.resolve(ROOT_PATH, 'build');
+
+console.log('APP_PATH', APP_PATH);
+
+// process.env.BABEL_ENV = TARGET;
 
 var common = {
   entry: APP_PATH,
+  resolve: {
+    extenstions: ['', '.js', '.jsx']
+  },
   module: {
     preloaders: [
       {
         test: /\.jsx?$/,
         loaders: ['eslint', 'jscs'],
-        include: APP_PATH
-      },
-      {
-        test: /\.css$/,
-        loaders: ['postcss'],
         include: APP_PATH
       }
     ],
@@ -31,15 +31,13 @@ var common = {
         test: /\.css$/,
         loaders: ['style', 'css'],
         include: APP_PATH
+      },
+      {
+        test: /\.jsx?$/,
+        loaders: ['babel'],
+        include: APP_PATH
       }
     ]
-  },
-  postcss: function() {
-    return [stylelint({
-      rules: {
-        'color-hex-case': 2
-      }
-    })];
   },
   plugins: [
     // Important! move HotModuleReplacementPlugin below
@@ -57,7 +55,12 @@ if (TARGET === 'start' || !TARGET) {
       historyApiFallback: true,
       hot: true,
       inline: true,
-      progress: true
+      progress: true,
+
+      // parse host and port from env so this is easy
+      // to customize
+      host: process.env.HOST,
+      port: process.env.PORT
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin()
