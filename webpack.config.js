@@ -16,7 +16,7 @@ console.log('APP_PATH', APP_PATH);
 var common = {
   entry: APP_PATH,
   resolve: {
-    extenstions: ['', '.js', '.jsx']
+    extensions: ['', '.js', '.jsx']
   },
   module: {
     preloaders: [
@@ -40,8 +40,6 @@ var common = {
     ]
   },
   plugins: [
-    // Important! move HotModuleReplacementPlugin below
-    // new webpack.HotModuleReplacementPlugin(),
     new HtmlwebpackPlugin({
       title: 'Kanban App Fun'
     })
