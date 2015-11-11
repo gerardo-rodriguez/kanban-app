@@ -9,9 +9,7 @@ var TARGET = process.env.npm_lifecycle_event;
 var ROOT_PATH = path.resolve(__dirname);
 var APP_PATH = path.resolve(ROOT_PATH, 'app');
 
-console.log('APP_PATH', APP_PATH);
-
-// process.env.BABEL_ENV = TARGET;
+process.env.BABEL_ENV = TARGET;
 
 var common = {
   entry: APP_PATH,
