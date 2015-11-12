@@ -36,7 +36,18 @@ export default class Note extends React.Component {
   }
 
   renderTask() {
-    return <div onClick={this.edit}>{this.props.task}</div>;
+    const onDelete = this.props.onDelete;
+
+    return (
+      <div onClick={this.edit}>
+        <span className='task'>{this.props.task}</span>
+        {onDelete ? this.renderDelete() : null}
+      </div>
+    );
+  }
+
+  renderDelete() {
+    return <button className='delete' onClick={this.props.onDelete}>delete</button>;
   }
 
   edit() {
@@ -52,6 +63,7 @@ export default class Note extends React.Component {
   }
 
   finishEdit(e) {
+    // See http://survivejs.com/webpack_react/implementing_notes/#adding-onedit-stub for a diagram of proposed solution.
     this.props.onEdit(e.target.value);
 
     this.setState({
