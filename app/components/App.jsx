@@ -1,6 +1,7 @@
-import uuid from 'node-uuid';
 import React from 'react';
 import Notes from './Notes';
+import NoteActions from '../actions/NoteActions';
+import NoteStore from '../stores/NoteStore';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -8,31 +9,26 @@ export default class App extends React.Component {
     // If you don't pass it, this.props won't get set!
     super(props);
 
-    this.state = {
-      notes: [
-        {
-          id: uuid.v4(),
-          task: 'Learn Webpack'
-        },
-        {
-          id: uuid.v4(),
-          task: 'Learn React!'
-        },
-        {
-          id: uuid.v4(),
-          task: 'Do laundry'
-        }
-      ]
-    };
+    // We have to bind the context of `storeChanged`
+    // explicitly so that `this` will point at the `App`
+    // instance. You'll be seing this patter a lot.
+    this.storeChanged = this.storeChanged.bind(this);
+    this.state = NoteStore.getState();
+  }
 
-    // We additionally had to set up a binding for `this.addNote`.
-    // Without it `this` of `addNote()` would point at the wrong context and wouldn't work.
-    // It is a little annoying, but it is necessary to bind nonetheless.
-    // Using `bind` at `constructor` gives us a small performance benefit as opposed to binding at `render()`.
-    this.findNote = this.findNote.bind(this);
-    this.addNote = this.addNote.bind(this);
-    this.editNote = this.editNote.bind(this);
-    this.deleteNote = this.deleteNote.bind(this);
+  componentDidMount() {
+    NoteStore.listen(this.storeChanged);
+  }
+
+  componentWillUnmount() {
+    NoteStore.unlisten(this.storeChanged);
+  }
+
+  storeChanged(state) {
+    // Without proper `bind`, `this` wouldn't
+    // point at the right context (defaults to `window`
+    // in browser environment)
+    this.setState(state);
   }
 
   render() {
@@ -49,49 +45,15 @@ export default class App extends React.Component {
     );
   }
 
-  deleteNote(id) {
-    const notes = this.state.notes;
-    const noteIndex = this.findNote(id);
-
-    if (noteIndex < 0) {
-      return;
-    }
-
-    this.setState({
-      notes: notes.slice(0, noteIndex).concat(notes.slice(noteIndex + 1))
-    });
+  addNote() {
+    NoteActions.create({task: 'New task'});
   }
 
   editNote(id, task) {
-    let notes = this.state.notes;
-    const noteIndex = this.findNote(id);
-
-    if (noteIndex < 0) {
-      return;
-    }
-
-    notes[noteIndex].task = task;
-
-    this.setState({notes});
+    NoteActions.update({id, task});
   }
 
-  findNote(id) {
-    const notes = this.state.notes;
-    const noteIndex = notes.findIndex((note) => note.id === id);
-
-    if (noteIndex < 0) {
-      console.warn('Failed to find note', notes, id);
-    }
-
-    return noteIndex;
-  }
-
-  addNote() {
-    this.setState({
-      notes: this.state.notes.concat([{
-        id: uuid.v4(),
-        task: 'New task'
-      }])
-    });
+  deleteNote(id) {
+    NoteActions.delete(id);
   }
 }
