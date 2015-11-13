@@ -1,10 +1,10 @@
 import AltContainer from 'alt-container';
 import React from 'react';
-import Notes from './Notes.jsx';
+import Notes from './Notes';
 import NoteActions from '../actions/NoteActions';
 import NoteStore from '../stores/NoteStore';
 import LaneActions from '../actions/LaneActions';
-import Editable from './Editable.jsx';
+import Editable from './Editable';
 
 export default class Lane extends React.Component {
   constructor(props) {
