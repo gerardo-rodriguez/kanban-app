@@ -1,6 +1,6 @@
 import AltContainer from 'alt-container';
 import React from 'react';
-import Lanes from './Lanes';
+import Lanes from './Lanes.jsx';
 import LaneActions from '../actions/LaneActions';
 import LaneStore from '../stores/LaneStore';
 
@@ -8,7 +8,7 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
-        <button className='add-lane' onClick={this.addItem}>Add Lane</button>
+        <button className="add-lane" onClick={this.addItem}>+</button>
         <AltContainer
           stores={[LaneStore]}
           inject={{
@@ -20,8 +20,7 @@ export default class App extends React.Component {
       </div>
     );
   }
-
   addItem() {
-    LaneActions.create({task: 'New lane'});
+    LaneActions.create({name: 'New lane'});
   }
 }
