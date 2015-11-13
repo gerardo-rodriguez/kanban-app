@@ -25,7 +25,7 @@ export default class Lane extends React.Component {
           <Editable className='lane-name' value={lane.name}
             onEdit={this.editName} />
           <div className='lane-add-note'>
-            <button onClick={this.addNote}>+</button>
+            <button onClick={this.addNote}>Add Note</button>
           </div>
         </div>
         <AltContainer
