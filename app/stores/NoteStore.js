@@ -25,7 +25,7 @@ class NoteStore {
     let notes = this.notes;
     const noteIndex = this.findNote(id);
 
-    if(noteIndex < 0) {
+    if (noteIndex < 0) {
       return;
     }
 
@@ -37,7 +37,7 @@ class NoteStore {
     const notes = this.notes;
     const noteIndex = this.findNote(id);
 
-    if(noteIndex < 0) {
+    if (noteIndex < 0) {
       return;
     }
 
@@ -49,7 +49,7 @@ class NoteStore {
     const notes = this.notes;
     const noteIndex = notes.findIndex((note) => note.id === id);
 
-    if(noteIndex < 0) {
+    if (noteIndex < 0) {
       console.warn('Failed to find note', notes, id);
     }
 
